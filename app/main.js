@@ -18,16 +18,9 @@ const server = net.createServer((socket) => {
         `HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length:${echoPath.length}\r\n\r\n${echoPath}`
       );
     } else if (path === "/user-agent") {
-      const userAgentHeader = responseJSON.find((text) => {
-        text.startsWith("User-Agent: ");
-      });
-      const userAgentVal = userAgentHeader
-        ? userAgentHeader.split(": ")[1]
-        : "Unknown";
-      const userAgentLen = userAgentHeader.length;
-
+      userAgent = responseJSON[2].split("User-Agent: ")[1];
       socket.write(
-        `HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: ${userAgentLen}\r\n\r\n${userAgentVal}`
+        `HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: ${userAgent}\r\n\r\n${userAgent.length}`
       );
     } else {
       socket.write("HTTP/1.1 404 Not Found\r\n\r\n");
