@@ -42,12 +42,6 @@ const server = net.createServer((socket) => {
       const dir = process.argv[3];
       const fileName = url.split("/files/")[1];
       const filePath = path.join(dir, fileName);
-      const contentLengthHeader = url.find((line) =>
-        line.startsWith("Content-Length:")
-      );
-      const contentLength = contentLengthHeader
-        ? parseInt(contentLengthHeader.split(": ")[1])
-        : 0;
       const bodyStartIndex = request.indexOf("\r\n\r\n") + 4;
       const requestBody = request.slice(bodyStartIndex);
       fs.writeFile(filePath, requestBody, (err) => {
