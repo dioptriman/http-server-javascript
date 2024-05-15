@@ -20,7 +20,7 @@ const server = net.createServer((socket) => {
     } else if (path === "/user-agent") {
       userAgent = responseJSON[2].split("User-Agent: ")[1];
       socket.write(
-        `HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: ${userAgent}\r\n\r\n${userAgent.length}`
+        `HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: ${userAgent.length}\r\n\r\n${userAgent}`
       );
     } else {
       socket.write("HTTP/1.1 404 Not Found\r\n\r\n");
