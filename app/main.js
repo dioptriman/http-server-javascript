@@ -7,15 +7,15 @@ console.log("Logs from your program will appear here!");
 const server = net.createServer((socket) => {
   socket.on("data", (data) => {
     let responseJSON = data.toString().split("\r\n");
-    const pathJson = responseJSON[0].split(" ")[1];
+    const path = responseJSON[0].split(" ")[1];
 
     // Path Manager
-    if (pathJson === "/") {
+    if (path === "/") {
       socket.write("HTTP/1.1 200 OK\r\n\r\nHello World");
-    } else if (pathJson.includes("/echo/")) {
-      const contentPath = pathJson.split("/echo/")[1];
+    } else if (path.includes("/echo/")) {
+      const echoPath = path.split("/echo/")[1];
       socket.write(
-        `HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length:${contentPath.length}\r\n\r\n${contentPath}`
+        `HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length:${echoPath.length}\r\n\r\n${echoPath}`
       );
     } else {
       socket.write("HTTP/1.1 404 Not Found\r\n\r\n");
