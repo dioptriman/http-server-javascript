@@ -25,7 +25,7 @@ const server = net.createServer((socket) => {
       socket.write(
         `HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: ${userAgent.length}\r\n\r\n${userAgent}`
       );
-    } else if (url.includes("/files/")) {
+    } else if (url.includes("/files/") && method === "GET") {
       const dir = process.argv[3];
       const fileName = url.split("/files/")[1];
       const filePath = path.join(dir, fileName);
