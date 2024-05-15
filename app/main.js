@@ -21,7 +21,9 @@ const server = net.createServer((socket) => {
       const userAgentHeader = responseJSON.find((text) => {
         text.startsWith("User-Agent: ");
       });
-      const userAgentVal = userAgentHeader.split(": ")[1];
+      const userAgentVal = userAgentHeader
+        ? userAgentHeader.split(": ")[1]
+        : "Unknown";
       const userAgentLen = Buffer.byteLength(userAgentVal, "utf-8");
 
       socket.write(
