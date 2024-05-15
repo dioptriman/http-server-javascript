@@ -44,7 +44,7 @@ const server = net.createServer((socket) => {
       const filePath = path.join(dir, fileName);
       const requestBody = responseJSON[responseJSON.length - 1];
 
-      fs.writeFileSync(filePath, requestBody, (err) => {
+      fs.writeFile(filePath, requestBody, (err) => {
         if (err) {
           socket.write("HTTP/1.1 500 Internal Server Error\r\n\r\n");
         } else {
