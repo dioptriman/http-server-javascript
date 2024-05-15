@@ -17,7 +17,7 @@ const server = net.createServer((socket) => {
       socket.write(
         `HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length:${echoPath.length}\r\n\r\n${echoPath}`
       );
-    } else if (path.includes("/user-agent/")) {
+    } else if (path === "/user-agent") {
       const userAgentHeader = responseJSON.find((text) => {
         text.startsWith("User-Agent: ");
       });
