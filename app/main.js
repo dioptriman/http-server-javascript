@@ -17,6 +17,16 @@ const server = net.createServer((socket) => {
       socket.write(
         `HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length:${echoPath.length}\r\n\r\n${echoPath}`
       );
+    } else if (path.includes("/user-agent/")) {
+      const userAgentHeader = responseJSON.find((text) => {
+        text.startsWith("User-Agent: ");
+      });
+      const userAgentVal = userAgentHeader.split(": ")[1];
+      const userAgentLen = Buffer.byteLength(userAgentVal, "utf-8");
+
+      socket.write(
+        `HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: ${userAgentLen}\r\n\r\n${userAgentVal}`
+      );
     } else {
       socket.write("HTTP/1.1 404 Not Found\r\n\r\n");
       1;
