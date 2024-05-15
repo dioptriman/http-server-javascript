@@ -8,13 +8,21 @@ const server = net.createServer((socket) => {
   socket.on("data", (data) => {
     let responseJSON = data.toString().split("\r\n");
     const pathJson = responseJSON[0].split(" ")[1];
+
+    // Path Manager
     if (pathJson === "/") {
       socket.write("HTTP/1.1 200 OK\r\n\r\nHello World");
+    } else if (pathJson.includes("/echo/")) {
+      const contentPath = pathJson.split("/echo/")[1];
+      socket.write(
+        `HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length:${contentPath.length}\r\n\r\n${contentPath}`
+      );
     } else {
       socket.write("HTTP/1.1 404 NOT FOUND\r\n\r\n");
       1;
     }
   });
+
   socket.on("close", () => {
     server.close();
   });
