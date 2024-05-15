@@ -10,6 +10,7 @@ const server = net.createServer((socket) => {
   socket.on("data", (data) => {
     let responseJSON = data.toString().split("\r\n");
     const url = responseJSON[0].split(" ")[1];
+    const method = responseJSON[0].split(" ")[0];
 
     // Url Manager
     if (url === "/") {
@@ -27,7 +28,7 @@ const server = net.createServer((socket) => {
     } else if (url.includes("/files/")) {
       const dir = process.argv[3];
       const fileName = url.split("/files/")[1];
-      const filePath = path.join(dir + fileName);
+      const filePath = path.join(dir, fileName);
 
       if (fs.existsSync(filePath)) {
         const data = fs.readFileSync(filePath, { encoding: "utf-8" });
@@ -37,6 +38,26 @@ const server = net.createServer((socket) => {
       } else {
         socket.write("HTTP/1.1 404 Not Found\r\n\r\n");
       }
+    } else if (url.includes("/files/") && method === "POST") {
+      const dir = process.argv[3];
+      const fileName = url.split("/files/")[1];
+      const filePath = path.join(dir, fileName);
+      const contentLengthHeader = url.find((line) =>
+        line.startsWith("Content-Length:")
+      );
+      const contentLength = contentLengthHeader
+        ? parseInt(contentLengthHeader.split(": ")[1])
+        : 0;
+      const bodyStartIndex = request.indexOf("\r\n\r\n") + 4;
+      const requestBody = request.slice(bodyStartIndex);
+      fs.writeFile(filePath, requestBody, (err) => {
+        if (err) {
+          socket.write("HTTP/1.1 500 Internal Server Error\r\n\r\n");
+        } else {
+          socket.write("HTTP/1.1 201 Created\r\n\r\n");
+        }
+        socket.end();
+      });
     } else {
       socket.write("HTTP/1.1 404 Not Found\r\n\r\n");
       1;
