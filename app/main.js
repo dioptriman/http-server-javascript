@@ -24,7 +24,7 @@ const server = net.createServer((socket) => {
       const userAgentVal = userAgentHeader
         ? userAgentHeader.split(": ")[1]
         : "Unknown";
-      const userAgentLen = Buffer.byteLength(userAgentVal, "utf-8");
+      const userAgentLen = userAgentHeader.length;
 
       socket.write(
         `HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: ${userAgentLen}\r\n\r\n${userAgentVal}`
